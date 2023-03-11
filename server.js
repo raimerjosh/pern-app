@@ -1,4 +1,4 @@
-//As long as this app is in development, it will set our env variables as "process.env"
+// As long as this app is in development, it will set our env variables as "process.env"
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
@@ -18,13 +18,13 @@ initializePassport(
     email => users.find(user => email === user.email),
     id => users.find(user => id === user.id));
 
-//tells our application to take form info like name, email, password and access them inside the REQUEST variable, when we make post requests. The name field in our form is what comes after req.body.<name field>. 
+// Tells our application to take form info like name, email, password and access them inside the REQUEST variable, when we make post requests. The name field in our form is what comes after req.body.<name field>. 
 app.use(express.urlencoded({ extended: false }));
 
-//View engines allow us to render web pages using template files. These templates are filled with actual data and served to the client.
+// View engines allow us to render web pages using template files. These templates are filled with actual data and served to the client.
 app.set('view-engine', 'ejs');
 
-//Allows us to logout by using a DELETE request, because HTML doesn't support delete requests as a method
+// Allows us to logout by using a DELETE request, because HTML doesn't support delete requests as a method
 app.use(methOverride('_method'));
 app.use(flash());
 
