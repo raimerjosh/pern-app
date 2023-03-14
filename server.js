@@ -2,13 +2,15 @@
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const initializePassport = require('./passport-config');
-const flash = require('express-flash');
 const session = require('express-session');
 const methOverride = require('method-override');
+const PORT = 3000;
 const app = express();
 
 const users = [];
@@ -19,14 +21,16 @@ initializePassport(
     id => users.find(user => id === user.id));
 
 // Tells our application to take form info like name, email, password and access them inside the REQUEST variable, when we make post requests. The name field in our form is what comes after req.body.<name field>. 
-app.use(express.urlencoded({ extended: false }));
 
-// View engines allow us to render web pages using template files. These templates are filled with actual data and served to the client.
-app.set('view-engine', 'ejs');
+// Allows json formatted request body to be parsed
+app.use(bodyParser.json())
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Allows us to logout by using a DELETE request, because HTML doesn't support delete requests as a method
 app.use(methOverride('_method'));
-app.use(flash());
+
+app.use(cors());
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -44,11 +48,12 @@ app.get('/', checkAuthenticated, (req, res) => {
 })
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
-    res.render('login.ejs')
+    console.log(req.isAuthenticated())
+    res.send({'test': 'test'})
 })
 
 app.get('/register', checkNotAuthenticated, (req, res) => {
-    res.render('register.ejs')
+    res.send(users)
 })
 
 app.post('/login', passport.authenticate('local', {
@@ -66,12 +71,10 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
             email: req.body.email,
             password: hashedPassword
         });
-        res.redirect('/login');
-
-    } catch {
-        res.redirect('/register')
+        res.redirect('/login')
+    } catch (error){
+        res.status(500).json(false)
     }
-    console.log(users);
 })
 
 
@@ -97,4 +100,6 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
-app.listen(3000);
+app.listen(PORT, () => {
+    console.log(`Server listening on port: ${PORT}`);
+});
