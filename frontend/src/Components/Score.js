@@ -1,15 +1,14 @@
 import React from "react";
 
-function Score({score, par, course, id, date}) {
+function Score({score, par, course, date}) {
+
     return (
-        <ul className="SingleList">
-            <h4>{course}</h4>
-            <ul key={course}>
-                <li key={date}>{date}</li>
-                <li key={par}>{`Par: ${par}`}</li>
-                <li key={score}>{`Score: ${score}`}</li>
-            </ul>
-        </ul>
+          <tr>
+            <td data-label="Course" className="BreakpointLabel">{course}</td>
+            <td data-label="Par">{par}</td>
+            <td data-label="Score">{score}</td>
+            <td data-label="Date">{date}</td>
+          </tr>
     )
 }
 

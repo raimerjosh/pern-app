@@ -13,26 +13,23 @@ function Profile() {
   if (!isAuthenticated) {
     return (
       <div className="NoAuthAlert">
-        <h3>Please Sign In to Input Scores!</h3>
+        <h3>Please Sign In to View/Input Scores!</h3>
       </div>
     )
   }
 
   if (isAuthenticated) {
-    console.log(user.picture)
     return (
-      isAuthenticated && (
         <div className="ProfileContainer">
           <h3>{`Welcome ${user.name}`}</h3>
           <div>
             <img src={user.picture} alt={user.name} className="ProfileImage"/>
           </div>
           <div>
-            <Link to="/scores">View Your Recent Scores</Link>
+            <Link to="/scores" className="ScoresLink">View Your Recent Scores</Link>
           </div>
         </div>
       )
-    )
   }
 };
 

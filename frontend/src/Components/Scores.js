@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import Score from "./Score";
+import ScoreForm from "./ScoreForm";
 
 function Scores() {
     const { user, isAuthenticated, isLoading } = useAuth0();
@@ -35,8 +36,15 @@ function Scores() {
     return (
         isAuthenticated && (
         <div className="Scores">
-            <Link to="/">Return to Profile</Link>
-            <div className="ScoreItems">
+            <Link to="/" className="ProfileLink">Return to Profile</Link>
+            <table className="Table">
+                <thead>
+                    <th>Course</th>
+                    <th>Par</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
                 {data.map(score => (
                     <Score 
                         score={score.score}
@@ -46,7 +54,9 @@ function Scores() {
                         date={score.date}
                     />
                 ))}
-            </div>
+                </tbody>
+            </table>
+            <ScoreForm/>
         </div>
     ))
 }

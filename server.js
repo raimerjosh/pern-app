@@ -26,10 +26,25 @@ const scores = [
     },
     {
         id: 3,
-        date: '8/25/22',
+        date: '2/05/20',
+        score: 80,
+        par: 72,
+        course: 'Holly Tree' 
+    },
+    {
+        id: 4,
+        date: '4/15/22',
         score: 70,
         par: 72,
-        course: 'Augusta' 
+        course: 'Jimmy Clay' 
+
+    },
+    {
+        id: 5,
+        date: '5/25/22',
+        score: 82,
+        par: 71,
+        course: 'Roy Kizer' 
 
     }
 ]
@@ -49,7 +64,9 @@ app.get('/scores', (req, res) => {
 })
 
 app.post('/scores', (req, res) => {
-    
+    console.log(req.body)
+    scores.push(req.body)
+    console.log(scores)
 })
 
 

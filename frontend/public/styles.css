@@ -2,11 +2,13 @@ body {
     background-color: powderblue;
 }
 
+* {
+    box-sizing: border-box;
+}
 .AppDiv {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: baseline;
 }
 
 .HeaderDiv {
@@ -50,22 +52,86 @@ body {
     text-align: center;
 }
 
+.ScoresLink {
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    padding: 20px;
+}
+
+.ScoresLink:hover {
+    color: azure;
+}
+
+.ProfileLink {
+    color: black;
+    text-align: left;
+    text-decoration: none;
+    padding: 20px;
+}
+
+.ProfileLink:hover {
+    color: azure;
+}
+
 .Scores {
-    height: 40vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    
 }
 
-.ScoreItems {
-    display: flex;
-    justify-content: space-around;
+.Table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.SingleList {
-    padding: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.Table td, .Table th {
+    padding: 12px 15px;
+    border: 1px solid;
+    text-align: center;
+}
+
+.Table th {
+    background-color: aquamarine;
+}
+
+@media(max-width: 500px) {
+
+    .Table thead {
+        display: none;
+    }
+
+   
+    .Table, .Table tbody, .Table tr, .Table td {
+        display: block;
+    }
+
+    .Table tr {
+        margin-bottom: 30px;
+    }
+
+    .Table td {
+        text-align: right;
+        padding-left: 50%;
+        text-align: right;
+        position: relative;
+    }
+
+    .BreakpointLabel {
+        background-color: aquamarine;
+    }
+
+    .Table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-size: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
 }
 
 
