@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState, Fragment } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import Score from "./Score";
-import ScoreForm from "./ScoreForm";
+import { nanoid } from "nanoid";
+import EditableRow from "./EditableRow";
+import ReadOnlyRow from "./ReadOnlyRow";
+import AddScore from "./AddScore";
+
 
 function Scores() {
-    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { isAuthenticated } = useAuth0();
+    const [scores, setScores] = useState([]);
     const navigate = useNavigate();
-    const [data, setData] = useState([]);
 
 
+    // Returns Score objects 
     useEffect(() => {
 
         if (!isAuthenticated) {
@@ -24,7 +28,7 @@ function Scores() {
             return res.json()
             })  
          .then(data => {
-            setData(data)
+            setScores(data)
          })
          .catch((err) => {
             console.log(err.message)
@@ -32,32 +36,157 @@ function Scores() {
 
     }, [])
 
+    const [addFormData, setAddFormData] = useState({
+        courseName: "",
+        par: "",
+        score: "",
+        date: "",
+    });
+
+    const [editFormData, setEditFormData] = useState({
+        courseName: "",
+        par: "",
+        score: "",
+        date: "",
+    });
+
+    const [editScoreId, setEditScoreId] = useState(null);
+
+    const handleAddFormChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...addFormData };
+        newFormData[fieldName] = fieldValue;
+
+        setAddFormData(newFormData);
+    };
+
+    const handleEditFormChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...editFormData };
+        newFormData[fieldName] = fieldValue;
+
+        setEditFormData(newFormData);
+    };
+
+    const handleAddFormSubmit = (event) => {
+        event.preventDefault();
+
+        const newScore = {
+        id: nanoid(),
+        courseName: addFormData.courseName,
+        par: addFormData.par,
+        score: addFormData.score,
+        date: addFormData.date,
+        };
+
+        const newScores = [...scores, newScore];
+        setScores(newScores);
+    };
+
+    const handleEditFormSubmit = (event) => {
+        event.preventDefault();
+
+        const editedScore = {
+        id: editScoreId,
+        courseName: editFormData.courseName,
+        par: editFormData.par,
+        score: editFormData.score,
+        date: editFormData.date,
+        };
+
+        const newScores = [...scores];
+
+        const index = scores.findIndex((score) => score.id === editScoreId);
+
+        newScores[index] = editedScore;
+
+        setScores(newScores);
+        setEditScoreId(null);
+    };
+
+    const handleEditClick = (event, score) => {
+        event.preventDefault();
+        setEditScoreId(score.id);
+
+        const formValues = {
+        courseName: score.courseName,
+        par: score.par,
+        score: score.score,
+        date: score.date,
+        };
+
+        setEditFormData(formValues);
+    };
+
+    const handleCancelClick = () => {
+        setEditScoreId(null);
+    };
+
+    const handleDeleteClick = (scoreId) => {
+        const newScores = [...scores];
+
+        const index = scores.findIndex((score) => score.id === scoreId);
+
+        newScores.splice(index, 1);
+
+        setScores(newScores);
+    };
 
     return (
         isAuthenticated && (
-        <div className="Scores">
-            <Link to="/" className="ProfileLink">Return to Profile</Link>
-            <table className="Table">
-                <thead>
-                    <th>Course</th>
-                    <th>Par</th>
-                    <th>Score</th>
-                    <th>Date</th>
-                </thead>
-                <tbody>
-                {data.map(score => (
-                    <Score 
-                        score={score.score}
-                        par={score.par}
-                        course={score.course}
-                        id={score.id}
-                        date={score.date}
-                    />
-                ))}
-                </tbody>
-            </table>
-            <ScoreForm/>
-        </div>
+        <div className="ScoresContainer">
+
+            <button className="ProfileLinkContainer">
+                <Link to="/" className="ProfileLink">Return to Profile</Link>
+            </button>
+
+            <AddScore 
+                handleAddFormChange={handleAddFormChange}
+                handleAddFormSubmit={handleAddFormSubmit}/>
+            
+            <div className="FormContainer">
+                <form onSubmit={handleEditFormSubmit}>
+                    <table className="ScoresTable">
+                        <thead>
+                            <tr>
+                            <th>Course</th>
+                            <th>Par</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {scores.map((score) => (
+                            <Fragment>
+                                {editScoreId === score.id ? (
+                                <EditableRow
+                                    editFormData={editFormData}
+                                    handleEditFormChange={handleEditFormChange}
+                                    handleCancelClick={handleCancelClick}
+                                />
+                                ) : (
+                                <ReadOnlyRow
+                                    score={score}
+                                    handleEditClick={handleEditClick}
+                                    handleDeleteClick={handleDeleteClick}
+                                />
+                                )}
+                            </Fragment>
+                            ))}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+      </div>
     ))
 }
 

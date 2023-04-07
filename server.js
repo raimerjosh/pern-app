@@ -12,39 +12,39 @@ const app = express();
 const scores = [
     {
         id: 1,
-        date: '12/25/23',
+        date: '2022-05-03',
         score: 75,
         par: 72,
-        course: 'Olde Florida'
+        courseName: 'Olde Florida'
     },
     {
         id: 2,
-        date: '10/15/23',
+        date: '2017-10-20',
         score: 78,
         par: 72,
-        course: 'Olympic Club'
+        courseName: 'Olympic Club'
     },
     {
         id: 3,
-        date: '2/05/20',
+        date: '2023-03-30',
         score: 80,
         par: 72,
-        course: 'Holly Tree' 
+        courseName: 'Holly Tree' 
     },
     {
         id: 4,
-        date: '4/15/22',
+        date: '2022-02-21',
         score: 70,
         par: 72,
-        course: 'Jimmy Clay' 
+        courseName: 'Jimmy Clay' 
 
     },
     {
         id: 5,
-        date: '5/25/22',
+        date: '2022-08-01',
         score: 82,
         par: 71,
-        course: 'Roy Kizer' 
+        courseName: 'Roy Kizer' 
 
     }
 ]
@@ -64,9 +64,8 @@ app.get('/scores', (req, res) => {
 })
 
 app.post('/scores', (req, res) => {
-    console.log(req.body)
     scores.push(req.body)
-    console.log(scores)
+    res.send(`Score: ${req.body.course} added.`)
 })
 
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import Scores from "./Scores";
 import { Link } from "react-router-dom";
 
 function Profile() {
@@ -26,7 +25,12 @@ function Profile() {
             <img src={user.picture} alt={user.name} className="ProfileImage"/>
           </div>
           <div>
-            <Link to="/scores" className="ScoresLink">View Your Recent Scores</Link>
+            <button className="ScoresLinkContainer">
+              <Link 
+                to="/scores" 
+                className="ScoresLink">View Your Recent Scores
+              </Link>
+            </button>
           </div>
         </div>
       )

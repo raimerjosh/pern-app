@@ -2,26 +2,17 @@ body {
     background-color: powderblue;
 }
 
-* {
-    box-sizing: border-box;
-}
-.AppDiv {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.HeaderDiv {
-    border-radius: 5px;
+.HeaderContainer {
     background-color: white;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    border-radius: 5px;
 }
 
 .Header {
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .LoginButton {
@@ -48,82 +39,125 @@ body {
     border-radius: 50px;
 }
 
-.NoAuthAlert {
-    text-align: center;
+.AppContainer {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.ScoresLinkContainer {
+    width: fit-content;
+    border-radius: 10px;
+    height: 20px;
 }
 
 .ScoresLink {
-    color: black;
-    text-align: center;
-    text-decoration: none;
-    padding: 20px;
-}
-
-.ScoresLink:hover {
-    color: azure;
-}
-
-.ProfileLink {
+    width: fit-content;
+    padding: 10px;
     color: black;
     text-align: left;
     text-decoration: none;
-    padding: 20px;
 }
 
-.ProfileLink:hover {
-    color: azure;
-}
-
-.Scores {
-    height: 100%;
+.ScoresContainer {
+    height: fit-content;
     display: flex;
     flex-direction: column;
-    
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.Table {
+.ProfileLinkContainer {
+    width: fit-content;
+    border-radius: 10px;
+    height: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.ProfileLink {
+    width: fit-content;
+    padding: 10px;
+    color: black;
+    text-align: left;
+    text-decoration: none;
+}
+
+/* Scores Table Styling */
+
+
+.ScoresTable {
     width: 100%;
     border-collapse: collapse;
 }
 
-.Table td, .Table th {
+.ScoresTable td, .Table th {
     padding: 12px 15px;
     border: 1px solid;
     text-align: center;
 }
 
-.Table th {
+.ScoresTable th {
     background-color: aquamarine;
 }
 
-@media(max-width: 500px) {
 
-    .Table thead {
+.AddScoreContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.AddScoreForm {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    justify-items: stretch;
+}
+
+@media(max-width: 620px) {
+
+
+    .ProfileLinkContainer {
+        margin: 10px;
+    }
+
+    .ScoresContainer {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        height: fit-content;
+    }
+
+    .ScoresTable thead {
         display: none;
     }
 
-   
-    .Table, .Table tbody, .Table tr, .Table td {
+   td#Course {
+    background-color: aquamarine;
+   }
+
+    .ScoresTable, .ScoresTable tbody, .ScoresTable tr, .ScoresTable td {
         display: block;
     }
 
-    .Table tr {
+    .ScoresTable tr {
         margin-bottom: 30px;
     }
 
-    .Table td {
+    .ScoresTable td {
         text-align: right;
         padding-left: 50%;
         text-align: right;
         position: relative;
     }
 
-    .BreakpointLabel {
-        background-color: aquamarine;
-    }
 
-    .Table td::before {
-        content: attr(data-label);
+    .ScoresTable td::before {
+        content: attr(id);
         position: absolute;
         left: 0;
         width: 50%;
@@ -132,6 +166,10 @@ body {
         font-weight: bold;
         text-align: left;
     }
+}
+
+.NoAuthAlert {
+    text-align: center;
 }
 
 

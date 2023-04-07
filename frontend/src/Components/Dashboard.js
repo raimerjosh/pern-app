@@ -1,7 +1,5 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "./LoginButton";
-import LogoutButton from "./LogoutButton";
 import Profile from "./Profile";
 
 function Dashboard() {
@@ -12,7 +10,7 @@ function Dashboard() {
     if (!error && isLoading) return (<p>Loading...</p>)
     if (!error && !isLoading) {
         return (
-                <Profile />
+            <Profile />
         )
     }
 }

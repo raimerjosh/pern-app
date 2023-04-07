@@ -4,8 +4,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Dashboard from "./Components/Dashboard";
 import Scores from "./Components/Scores";
 import Header from "./Components/Header";
-import LoginButton from "./Components/LoginButton";
-import LogoutButton from "./Components/LogoutButton";
 
 function App() {
   const { isLoading, error } = useAuth0();
@@ -15,12 +13,8 @@ function App() {
   
   if (!error && !isLoading) {
     return (
-      <div className="AppDiv">
-        <div className="HeaderDiv">
-          <Header/>
-          <LoginButton/>
-          <LogoutButton/>
-        </div>
+      <div className="App">
+        <Header/>
         <Routes>
           <Route path="/" element={<Dashboard/>}/>
           <Route path="/scores" element={<Scores/>}/>
