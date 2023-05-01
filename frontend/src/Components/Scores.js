@@ -12,6 +12,7 @@ function Scores() {
     const [scores, setScores] = useState([]);
     const navigate = useNavigate();
 
+// Need to pull the email from Auth0 user object to give to the query to add score to right user
 
     // Returns Score objects 
     useEffect(() => {
@@ -76,15 +77,30 @@ function Scores() {
         setEditFormData(newFormData);
     };
 
-    const handleAddFormSubmit = (event) => {
+    const handleAddFormSubmit = async (event) => {
         event.preventDefault();
 
+        await fetch('http://localhost:3001/scores', {
+            method: 'POST',
+            body: JSON.stringify({
+                courseName: addFormData.courseName,
+                par: addFormData.par,
+                score: addFormData.score,
+                date: addFormData.date,
+                //This needs user_id to put into query 
+            }),
+            headers: {"Content-Type": "application/json"}
+          })
+          .then(res => res.json())
+          .then(data => console.log(data))
+          .catch(err => console.log(`You have an error: ${err}`))
+
         const newScore = {
-        id: nanoid(),
-        courseName: addFormData.courseName,
-        par: addFormData.par,
-        score: addFormData.score,
-        date: addFormData.date,
+            id: nanoid(),
+            courseName: addFormData.courseName,
+            par: addFormData.par,
+            score: addFormData.score,
+            date: addFormData.date,
         };
 
         const newScores = [...scores, newScore];
