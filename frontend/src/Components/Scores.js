@@ -8,20 +8,28 @@ import AddScore from "./AddScore";
 
 
 function Scores() {
-    const { isAuthenticated } = useAuth0();
+    const { isAuthenticated, user } = useAuth0();
     const [scores, setScores] = useState([]);
     const navigate = useNavigate();
 
 // Need to pull the email from Auth0 user object to give to the query to add score to right user
 
     // Returns Score objects 
+    // Needs to return the current users scores
     useEffect(() => {
 
         if (!isAuthenticated) {
             navigate('/')
         }
 
-        fetch('http://localhost:3001/scores')
+        fetch('http://localhost:3001/scores', {
+            method: 'POST',
+            // Gives query the current user email to render appropriate scores
+            body: JSON.stringify({
+                userEmail: user.email
+            }),
+            headers: {"Content-Type": "application/json"}
+          })
          .then((res) => {
             if (!res.ok) {
                 throw new Error(`HTTP error, the status is: ${res.status}`)
@@ -80,7 +88,7 @@ function Scores() {
     const handleAddFormSubmit = async (event) => {
         event.preventDefault();
 
-        await fetch('http://localhost:3001/scores', {
+        await fetch('http://localhost:3001/score', {
             method: 'POST',
             body: JSON.stringify({
                 courseName: addFormData.courseName,

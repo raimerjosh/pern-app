@@ -8,7 +8,8 @@ const pool = new Pool({
 })
 
 const getScores = (req, res) => {
-    pool.query('SELECT * FROM score', (err, results) => {
+    const { userEmail } = req.body;
+    pool.query('SELECT "courseName", "par", "score", "date" FROM "user" INNER JOIN score ON "user".id = user_id WHERE "user".email = $1', [userEmail], (err, results) => {
         if (err) {
             throw err;
         }
@@ -18,7 +19,6 @@ const getScores = (req, res) => {
 
 const addScore = (req, res) => {
     const { courseName, par, score, date } = req.body;
-    console.log(req.body.courseName);
 
     pool.query('INSERT INTO score ("courseName", par, score, date, user_id) VALUES ($1, $2, $3, $4, $5)', [courseName, par, score, date], (err, results) => {
         if (err) {

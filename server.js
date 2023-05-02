@@ -21,9 +21,9 @@ app.use(express.urlencoded({ extended: false }));
 const db = require('./queries');
 
 // Routes
-app.get('/scores', db.getScores, (req, res) => {})
+app.post('/scores', db.getScores, (req, res) => {})
 
-app.post('/scores', db.addScore, (req, res) => {})
+app.post('/score', db.addScore, (req, res) => {})
 
 
 app.listen(PORT, () => {
