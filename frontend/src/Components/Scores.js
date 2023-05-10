@@ -12,10 +12,6 @@ function Scores() {
     const [scores, setScores] = useState([]);
     const navigate = useNavigate();
 
-// Need to pull the email from Auth0 user object to give to the query to add score to right user
-
-    // Returns Score objects 
-    // Needs to return the current users scores
     useEffect(() => {
 
         if (!isAuthenticated) {
@@ -42,7 +38,6 @@ function Scores() {
          .catch((err) => {
             console.log(err.message)
          })
-
     }, [])
 
     const [addFormData, setAddFormData] = useState({
@@ -95,7 +90,7 @@ function Scores() {
                 par: addFormData.par,
                 score: addFormData.score,
                 date: addFormData.date,
-                //This needs user_id to put into query 
+                userEmail: user.email
             }),
             headers: {"Content-Type": "application/json"}
           })
@@ -115,20 +110,31 @@ function Scores() {
         setScores(newScores);
     };
 
-    const handleEditFormSubmit = (event) => {
+    const handleEditFormSubmit = async (event) => {
+        
         event.preventDefault();
 
         const editedScore = {
-        id: editScoreId,
-        courseName: editFormData.courseName,
-        par: editFormData.par,
-        score: editFormData.score,
-        date: editFormData.date,
+            scoreId: editScoreId,
+            courseName: editFormData.courseName,
+            par: editFormData.par,
+            score: editFormData.score,
+            date: editFormData.date,
         };
+
+        await fetch('http://localhost:3001/score', {
+            method: 'PUT',
+            body: JSON.stringify(editedScore),
+            headers: {"Content-Type": "application/json"}
+        })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
+
 
         const newScores = [...scores];
 
-        const index = scores.findIndex((score) => score.id === editScoreId);
+        const index = scores.findIndex((score) => score.scoreId === editScoreId);
 
         newScores[index] = editedScore;
 
@@ -138,26 +144,40 @@ function Scores() {
 
     const handleEditClick = (event, score) => {
         event.preventDefault();
-        setEditScoreId(score.id);
+
+        setEditScoreId(score.scoreId);
 
         const formValues = {
-        courseName: score.courseName,
-        par: score.par,
-        score: score.score,
-        date: score.date,
+            courseName: score.courseName,
+            par: score.par,
+            score: score.score,
+            date: score.date,
         };
 
         setEditFormData(formValues);
     };
 
-    const handleCancelClick = () => {
+
+    const handleCancelClick = (event) => {
         setEditScoreId(null);
     };
 
-    const handleDeleteClick = (scoreId) => {
+   
+    const handleDeleteClick = async (scoreId) => {
+
+        await fetch('http://localhost:3001/score', {
+            method: 'DELETE',
+            body: JSON.stringify({
+                scoreId: scoreId
+            }),
+            headers: {"Content-Type": "application/json"}
+        })
+        .then(res => res.json())
+        .then(data => setScores(data))
+
         const newScores = [...scores];
 
-        const index = scores.findIndex((score) => score.id === scoreId);
+        const index = scores.findIndex((score) => score.scoreId === scoreId);
 
         newScores.splice(index, 1);
 
@@ -191,7 +211,7 @@ function Scores() {
                         <tbody>
                             {scores.map((score) => (
                             <Fragment>
-                                {editScoreId === score.id ? (
+                                {editScoreId === score.scoreId ? (
                                 <EditableRow
                                     editFormData={editFormData}
                                     handleEditFormChange={handleEditFormChange}
